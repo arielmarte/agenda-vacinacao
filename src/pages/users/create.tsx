@@ -48,7 +48,7 @@ export default function CreateUser() {
           as="form"
           flex="1"
           borderRadius={8}
-          bg="gray.800"
+          bg="gray.100"
           p={["6", "8"]}
           onSubmit={handleSubmit(handleCreateUser)}
         >

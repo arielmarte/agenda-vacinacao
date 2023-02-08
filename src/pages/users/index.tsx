@@ -7,6 +7,7 @@ import { Pagination } from "../../components/Pagination";
 import { Sidebar } from "../../components/Sidebar";
 import { useUsers } from "../../services/hooks/useUsers";
 import { useState } from "react";
+import { ModalForm } from "@/components/ModalForm";
 
 export default function UserList() {
   const { data, isLoading, isFetching, error } = useUsers()
@@ -54,6 +55,9 @@ export default function UserList() {
             >
               Excluir
             </Button>
+            <ModalForm buttonName={"teste"} title={"meuTeste"}>
+              <input type="text" placeholder="Nome" />
+            </ModalForm>
             </ButtonGroup>
           </Flex>
 
