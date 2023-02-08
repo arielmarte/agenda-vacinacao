@@ -20,13 +20,13 @@ export default function Alergias() {
                 <Sidebar />
 
                 <Box flex="1" borderRadius={8} bg="gray.100" p="8">
-                    
+
                     <Flex mb="8" justify="space-between" align="center">
-                    <Heading size="lg" fontWeight="normal">Alergias</Heading>
+                        <Heading size="lg" fontWeight="normal">Vacinas</Heading>
                         <ButtonGroup>
                             <Button
                                 as={NextLink}
-                                href="/alergias/create"
+                                href="/vacinas/create"
                                 size="sm"
                                 fontSize="sm"
                                 colorScheme="green"
@@ -49,9 +49,10 @@ export default function Alergias() {
                         <Table colorScheme="whiteAlpha">
                             <Thead>
                                 <Tr>
-                                    <Th>Nome</Th>
+                                    <Th>Título</Th>
+                                    <Th>Doses</Th>
+                                    <Th>Intervalo</Th>
                                     <Th>Descrição</Th>
-                                    <Th>Detalhes</Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
@@ -63,15 +64,19 @@ export default function Alergias() {
                                                 {user.createdAt}
                                             </Td>
                                             <Td>
-                                                <Text fontSize="sm" color="gray.600">{user.email}</Text>  
+                                                {user.email}
+                                            </Td>
+                                            <Td>
+                                                <Text>{user.name} {user.name}</Text>
                                             </Td>
                                             <Td>
                                                 <Button
-                                                as={NextLink}
-                                                href={`/users/edit/${user.id}`}        
+                                                    as={NextLink}
+                                                    href={`/users/edit/${user.id}`}
                                                 >
                                                     <Icon as={RiInformationLine} fontSize="20" />
                                                 </Button>
+
                                             </Td>
 
                                         </Tr>
@@ -80,9 +85,6 @@ export default function Alergias() {
                             </Tbody>
                         </Table>
                     )}
-
-
-
                 </Box>
             </Flex>
         </Box>
