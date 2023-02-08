@@ -12,9 +12,9 @@ export function SidebarNav() {
         <NavLink icon={TbList} href="/users">Agenda</NavLink>
       </NavSection>
       <NavSection title="DADOS">
-        <NavLink icon={TbUser} href="/automation">Pacientes</NavLink>
-        <NavLink icon={TbVaccine} href="/forms">Vacinas</NavLink>
-        <NavLink icon={TbHeartPlus} href="/forms">Alergias</NavLink>
+        <NavLink icon={TbUser} href="/pacientes">Pacientes</NavLink>
+        <NavLink icon={TbVaccine} href="/vacinas">Vacinas</NavLink>
+        <NavLink icon={TbHeartPlus} href="/alergias">Alergias</NavLink>
       </NavSection>
     </Stack>
   );

@@ -41,10 +41,7 @@ export function Header() {
 
       <Logo />
     
-      <Flex align="center" ml="auto">
-        <NotificationsNav />
-        <Profile showProfileData={isWideVersion} />
-      </Flex>
+
     </Flex>
   );
 }
