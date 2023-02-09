@@ -33,6 +33,9 @@ export async function getUsers(): Promise<GetUsersResponse> {
   }
 }
 
+export async function deleteUser(id: string) {
+  await api.delete(`users/${id}`);
+}
 
 export function useUsers() {
   return useQuery('users', getUsers, {

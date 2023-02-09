@@ -10,18 +10,19 @@ import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
 import { useState } from "react";
 
-import { Select } from "@/components/Form/Select";
-import { Textarea } from "@/components/Form/Textarea";
+import { Select } from "../../components/Form/Select";
+import { Textarea } from "../../components/Form/Textarea";
 
-type CreateUserFormData = {
+
+type CreateVacinaFormData = {
     titulo: string;
     descricao: string;
     doses: number;
-    periodicidade: number;
-    intervalo: number;
+    periodicidade?: number;
+    intervalo?: number;
 };
 
-const createUserFormSchema = yup.object().shape({
+const createVacinaFormSchema = yup.object().shape({
     titulo: yup.string().required('Título é obrigatório').max(60, 'Título deve ter no máximo 60 caracteres'),
     descricao: yup.string().max(200, 'Descrição deve ter no máximo 200 caracteres'),
     doses: yup.number().transform((value) => (isNaN(value) ? undefined : value)).required('Número de Doses é obrigatório').min(1, 'Dose deve ser no mínimo 1'),
@@ -39,9 +40,9 @@ const createUserFormSchema = yup.object().shape({
 
 });
 
-export default function CreateUser() {
-    const { register, handleSubmit, formState } = useForm<CreateUserFormData>({
-        resolver: yupResolver(createUserFormSchema)
+export default function CreateVacina() {
+    const { register, handleSubmit, formState } = useForm<CreateVacinaFormData>({
+        resolver: yupResolver(createVacinaFormSchema)
     })
 
     const [doseField, setDoseField] = useState('');
@@ -57,7 +58,7 @@ export default function CreateUser() {
       };
 
 
-    const handleCreateUser: SubmitHandler<CreateUserFormData> = async (values) => {
+    const handleCreateVacina: SubmitHandler<CreateVacinaFormData> = async (values) => {
         await new Promise(resolve => setTimeout(resolve, 2000));
 
         console.log(values);
@@ -78,7 +79,7 @@ export default function CreateUser() {
                     borderRadius={8}
                     bg="gray.100"
                     p={["6", "8"]}
-                    onSubmit={handleSubmit(handleCreateUser)}
+                    onSubmit={handleSubmit(handleCreateVacina)}
                 >
                     <Flex mb="8" justify="space-between" align="center">
                         <Heading size="lg" fontWeight="normal">Cadastrar Vacina</Heading>

@@ -3,18 +3,18 @@ import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
 import { Box, Button, ButtonGroup, Divider, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Th, Thead, Tr, Text } from "@chakra-ui/react";
 import { RiAddLine, RiInformationLine } from "react-icons/ri";
-import { deleteVacina, useVacinas } from "@/services/hooks/useVacinas";
+import { deleteUsuario, useUsuarios } from "@/services/hooks/useUsuarios";
 import { ModalInfo } from "@/components/ModalInfo";
 import { AlertDelete } from "@/components/AlertDelete";
 
 
-export default function Vacinas() {
+export default function Usuarios() {
 
-    const { data, isLoading, isFetching, error } = useVacinas()
+    const { data, isLoading, isFetching, error } = useUsuarios()
 
-    const handleDeleteVacina = async (id: number) => {
-        await deleteVacina(id);
-      };
+    const handleDeleteUsuario = async (id: number) => {
+        await deleteUsuario(id);
+    };
 
 
     return (
@@ -27,11 +27,11 @@ export default function Vacinas() {
                 <Box flex="1" borderRadius={8} bg="gray.100" p="8">
 
                     <Flex mb="8" justify="space-between" align="center">
-                        <Heading size="lg" fontWeight="normal">Vacinas</Heading>
+                        <Heading size="lg" fontWeight="normal">Usuarios</Heading>
                         <ButtonGroup>
                             <Button
                                 as={NextLink}
-                                href="/vacinas/create"
+                                href="/usuarios/create"
                                 size="sm"
                                 fontSize="sm"
                                 colorScheme="green"
@@ -54,35 +54,41 @@ export default function Vacinas() {
                         <Table colorScheme="whiteAlpha">
                             <Thead>
                                 <Tr>
-                                    <Th>Título</Th>
-                                    <Th>Doses</Th>
-                                    <Th>Intervalo</Th>
-                                    <Th textAlign='center'>Descrição</Th>
+                                    <Th>Nome</Th>
+                                    <Th>Data de Nascimento</Th>
+                                    <Th>Sexo</Th>
+                                    <Th textAlign='center'>Endereço</Th>
                                     <Th textAlign='center'>Excluir</Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {data!.vacinas.map(vacina => {
+                                {data!.usuarios.map(usuario => {
                                     return (
-                                        <Tr key={vacina.id}>
+                                        <Tr key={usuario.id}>
 
                                             <Td>
-                                                {vacina.titulo}
+                                                {usuario.nome}
                                             </Td>
                                             <Td>
-                                                {vacina.doses}
+                                                {new Intl.DateTimeFormat('pt-BR').format(
+                                                    usuario.dataNascimento)
+                                                }
                                             </Td>
                                             <Td>
-                                                <Text>{vacina.intervalo} {vacina.periodicidade}</Text>
+                                                <Text>{usuario.sexo}</Text>
                                             </Td>
                                             <Td textAlign='center'>
-                                                <ModalInfo title={vacina.titulo}>
-                                                    <Text>{vacina.descricao}</Text>
+                                                <ModalInfo title={"Endereço de "+usuario.nome}>
+                                                    <Text>{"Logradouro: "+usuario.logradouro}</Text>
+                                                    <Text>{"Numero: "+usuario.numero}</Text>
+                                                    <Text>{"Setor: "+usuario.setor}</Text>
+                                                    <Text>{"Cidade: "+usuario.cidade}</Text>
+                                                    <Text>{"UF: "+usuario.uf}</Text>
                                                 </ModalInfo>
                                             </Td>
                                             <Td textAlign='center'>
-                                                <AlertDelete idDelete={vacina.id!!} onDelete={() => handleDeleteVacina(vacina.id!!)}>
-                                                    <Text fontWeight="bold">Deseja excluir a vacina: {vacina.titulo}?</Text>
+                                                <AlertDelete idDelete={usuario.id!!} onDelete={() => handleDeleteUsuario(usuario.id!!)}>
+                                                    <Text fontWeight="bold">Deseja excluir a usuario: {usuario.nome}?</Text>
                                                 </AlertDelete>
                                             </Td>
 
