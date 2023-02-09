@@ -10,7 +10,6 @@ type User = {
 
 type GetUsersResponse = {
   users: User[];
-  tableColumns: string[];
 }
 
 export async function getUsers(): Promise<GetUsersResponse> {
@@ -29,10 +28,8 @@ export async function getUsers(): Promise<GetUsersResponse> {
     };
   });
 
-
   return {
-    users,
-    tableColumns: ['Check', 'Nome', 'Email', 'Criado em']
+    users
   }
 }
 

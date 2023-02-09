@@ -8,6 +8,10 @@ import NextLink from 'next/link'
 import { Input } from "../../components/Form/Input";
 import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
+import { useState } from "react";
+
+import { Select } from "@/components/Form/Select";
+import { Textarea } from "@/components/Form/Textarea";
 
 type CreateUserFormData = {
     titulo: string;
@@ -18,18 +22,39 @@ type CreateUserFormData = {
 };
 
 const createUserFormSchema = yup.object().shape({
-    name: yup.string().required('Nome obrigatório'),
-    email: yup.string().required('E-mail obrigatório').email('E-mail inválido'),
-    password: yup.string().required('Senha obrigatória').min(6, 'No mínimo 6 caracteres'),
-    password_confirmation: yup.string().oneOf([
-        null, yup.ref('password')
-    ], 'As senhas precisam ser iguais')
-})
+    titulo: yup.string().required('Título é obrigatório').max(60, 'Título deve ter no máximo 60 caracteres'),
+    descricao: yup.string().max(200, 'Descrição deve ter no máximo 200 caracteres'),
+    doses: yup.number().transform((value) => (isNaN(value) ? undefined : value)).required('Número de Doses é obrigatório').min(1, 'Dose deve ser no mínimo 1'),
+    intervalo: yup.number().when('doses', {
+        is: (doses: number) => doses > 1,
+        then: yup.number().typeError('Número de Doses é obrigatório').required('Necessário definir intervalo').min(1, 'Intervalo deve ser no mínimo 1'),
+        otherwise: yup.number().transform((value) => (isNaN(value) ? undefined : value)).nullable()
+    }),
+
+    periodicidade: yup.string().when('doses', {
+        is: (doses: number) => doses > 1,
+        then: yup.string().required('Necessário definir periodicidade').oneOf(['DIAS', 'SEMANAS', 'MESES', 'ANOS'], 'Necessário definir periodicidade'),
+        otherwise: yup.string().notRequired(),
+    }),
+
+});
 
 export default function CreateUser() {
     const { register, handleSubmit, formState } = useForm<CreateUserFormData>({
         resolver: yupResolver(createUserFormSchema)
     })
+
+    const [doseField, setDoseField] = useState('');
+    const [intervaloField, setIntervaloField] = useState('');
+    const [periodicidadeField, setPeriodicidadeField] = useState('');
+
+    const handleDoseFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setDoseField(event.target.value);
+        if (event.target.value <= '1') {
+          setIntervaloField('');
+          setPeriodicidadeField('');
+        }
+      };
 
 
     const handleCreateUser: SubmitHandler<CreateUserFormData> = async (values) => {
@@ -70,26 +95,22 @@ export default function CreateUser() {
                                 error={formState.errors.titulo}
                             />
 
-                            <Input
+                            <Textarea
                                 label="Descrição"
-                                type="Textarea"
+
                                 {...register("descricao")}
                                 error={formState.errors.descricao}
                             />
+                        </SimpleGrid>
 
+                        <SimpleGrid minChildWidth="240px" spacing={["6", "8"]} w="100%">
                             <Input
-                                label="doses"
+                                label="Doses"
                                 type="number"
                                 {...register("doses")}
                                 error={formState.errors.doses}
-                            />
-
-                            <Input
-                                label="Periodicidade"
-
-                                type="number"
-                                {...register("periodicidade")}
-                                error={formState.errors.periodicidade}
+                                value={doseField}
+                                 onChange={handleDoseFieldChange}
                             />
 
                             <Input
@@ -97,29 +118,27 @@ export default function CreateUser() {
                                 type="number"
                                 {...register("intervalo")}
                                 error={formState.errors.intervalo}
+                                value={intervaloField}
+                                onChange={(event) => setIntervaloField(event.target.value)}
+                                isDisabled={doseField <= '1'}
                             />
 
-
+                            <Select
+                                label="Periodicidade"
+                                {...register("periodicidade")}
+                                error={formState.errors.periodicidade}
+                                value={periodicidadeField}
+                                onChange={(event) => setPeriodicidadeField(event.target.value)}
+                                isDisabled={doseField <= '1'}>
+                                <option value="" defaultChecked></option>
+                                <option value="DIAS">dia(s)</option>
+                                <option value="SEMANAS">semana(s)</option>
+                                <option value="MESES">mese(s)</option>
+                                <option value="ANOS">ano(s)</option>
+                            </Select>
 
 
                         </SimpleGrid>
-
-                        {/* <SimpleGrid minChildWidth="240px" spacing={["6", "8"]} w="100%">
-                            <Input
-
-                                type="password"
-                                label="Senha"
-                                error={formState.errors.password}
-                                {...register("password")}
-                            />
-                            <Input
-
-                                type="password"
-                                label="Confirmação da senha"
-                                error={formState.errors.password_confirmation}
-                                {...register("password_confirmation")}
-                            />
-                        </SimpleGrid> */}
                     </VStack>
 
                     <Flex mt="8" justify="flex-end">

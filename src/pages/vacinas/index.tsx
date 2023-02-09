@@ -1,15 +1,13 @@
 import NextLink from "next/link";
-import { Input } from "@/components/Form/Input";
 import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
-import { Box, Button, ButtonGroup, Checkbox, Divider, Flex, Heading, HStack, Icon, Link, SimpleGrid, Spinner, Table, Tbody, Td, Th, Thead, Tr, VStack, Text } from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
-import { RiAddLine, RiDeleteBin7Line, RiInformationLine } from "react-icons/ri";
-import { useUsers } from "@/services/hooks/useUsers";
+import { Box, Button, ButtonGroup, Divider, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Th, Thead, Tr, Text } from "@chakra-ui/react";
+import { RiAddLine, RiInformationLine } from "react-icons/ri";
+import { useVacinas } from "@/services/hooks/useVacinas";
 
-export default function Alergias() {
+export default function Vacinas() {
 
-    const { data, isLoading, isFetching, error } = useUsers()
+    const { data, isLoading, isFetching, error } = useVacinas()
 
 
     return (
@@ -56,23 +54,23 @@ export default function Alergias() {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {data!.users.map(user => {
+                                {data!.vacinas.map(vacina => {
                                     return (
-                                        <Tr key={user.id}>
+                                        <Tr key={vacina.id}>
 
                                             <Td>
-                                                {user.createdAt}
+                                                {vacina.titulo}
                                             </Td>
                                             <Td>
-                                                {user.email}
+                                                {vacina.doses}
                                             </Td>
                                             <Td>
-                                                <Text>{user.name} {user.name}</Text>
+                                                <Text>{vacina.intervalo} {vacina.periodicidade}</Text>
                                             </Td>
                                             <Td>
                                                 <Button
                                                     as={NextLink}
-                                                    href={`/users/edit/${user.id}`}
+                                                    href={`/users/edit/${vacina.id}`}
                                                 >
                                                     <Icon as={RiInformationLine} fontSize="20" />
                                                 </Button>

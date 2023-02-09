@@ -1,20 +1,20 @@
 import { forwardRef, ForwardRefRenderFunction } from "react";
 import { FieldError } from 'react-hook-form'
-import { FormControl, FormErrorMessage, FormLabel, Textarea as ChakraTextarea, TextareaProps as ChakraTextareaProps } from "@chakra-ui/react";
+import { FormControl, FormErrorMessage, FormLabel, Select as ChakraSelect, SelectProps as ChakraSelectProps } from "@chakra-ui/react";
 
-interface TextareaProps extends ChakraTextareaProps {
+interface SelectProps extends ChakraSelectProps {
   name: string;
   label?: string;
   error?: FieldError;
 } 
 
-const TextareaBase: ForwardRefRenderFunction<HTMLTextAreaElement, TextareaProps> 
+const SelectBase: ForwardRefRenderFunction<HTMLSelectElement, SelectProps> 
   = ({ name, label, error = null, ...rest }, ref) => {
     return (
       <FormControl isInvalid={!!error}>
         { !!label && <FormLabel htmlFor={name}>{label}</FormLabel> }
 
-        <ChakraTextarea
+        <ChakraSelect
           name={name}
           id={name}
           focusBorderColor="green.300"
@@ -38,4 +38,4 @@ const TextareaBase: ForwardRefRenderFunction<HTMLTextAreaElement, TextareaProps>
     );
   }
 
-  export const Textarea = forwardRef(TextareaBase);
+  export const Select = forwardRef(SelectBase);
