@@ -1,56 +1,35 @@
 import { useQuery } from "react-query";
 import { api } from "../api";
 
-type Vacina = {
-  id?: number;
-  titulo: string;
-  descricao?: string;
-  doses: number;
-  periodicidade?: string;
-  intervalo?: number;
+type UF = {
+  sigla: string;
+  nome: string;
 }
 
-type GetVacinaResponse = {
-  vacinas: Vacina[];
+type GetUFResponse = {
+  ufs: UF[];
 }
 
-type CreateVacinaResponse = {
-  vacina: Vacina;
-}
+export async function getUfs(): Promise<GetUFResponse> {
+  const { data } = await api.get('estados')
 
-export async function getVacinas(): Promise<GetVacinaResponse> {
-  const { data } = await api.get('vacinas')
-
-  const vacinas = data.map((vacina: Vacina) => {
+  const ufs = data.map((uf: UF) => {
     return {
-      id: vacina.id,
-      titulo: vacina.titulo,
-      descricao: vacina.descricao,
-      doses: vacina.doses,
-      periodicidade: (vacina.doses == 1 ? 'Unica' : vacina.periodicidade?.toLowerCase),
-      intervalo: (vacina.doses == 1 ? '' : vacina.intervalo),
+      sigla: uf.sigla,
+      nome: uf.nome,
+
     };
   });
-  console.log(vacinas);
+  console.log(ufs);
   return {
-    vacinas
+    ufs
   }
 }
 
 
-export function useVacinas() {
-  return useQuery('vacinas', getVacinas, {
+export function useUfs() {
+  return useQuery('ufs', getUfs, {
   })
 }
 
-export async function useCreateVacina(vacina: Vacina): Promise<CreateVacinaResponse> {
-  const { data } = await api.post('/vacinas', vacina);
 
-  return {
-    vacina: data
-  };
-}
-
-export async function deleteVacina(id: number) {
-  await api.delete(`vacinas/${id}`);
-}

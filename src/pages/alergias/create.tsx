@@ -1,3 +1,4 @@
+import Router from 'next/router';
 import { Box, Button, Divider, Flex, Heading, HStack, SimpleGrid, VStack } from "@chakra-ui/react";
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup';
@@ -8,28 +9,26 @@ import NextLink from 'next/link'
 import { Input } from "../../components/Form/Input";
 import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
+import { useCreateAlergia } from "@/services/hooks/useAlergias";
 
-type CreateUserFormData = {
-    name: string;
-    email: string;
-    password: string;
-    password_confirmation: string;
+type CreateAlergiaFormData = {
+    nome: string;
 };
 
-const createUserFormSchema = yup.object().shape({
-    name: yup.string().required('Nome obrigatório')
+const createAlergiaFormSchema = yup.object().shape({
+    nome: yup.string().required('Nome obrigatório')
 })
 
-export default function CreateUser() {
-    const { register, handleSubmit, formState } = useForm<CreateUserFormData>({
-        resolver: yupResolver(createUserFormSchema)
+export default function CreateAlergia() {
+    const { register, handleSubmit, formState } = useForm<CreateAlergiaFormData>({
+        resolver: yupResolver(createAlergiaFormSchema)
     })
 
 
-    const handleCreateUser: SubmitHandler<CreateUserFormData> = async (values) => {
-        await new Promise(resolve => setTimeout(resolve, 500));
-
-        console.log(values);
+    const handleCreateAlergia: SubmitHandler<CreateAlergiaFormData> = async (values) => {
+        //await new Promise(resolve => setTimeout(resolve, 500));
+        await useCreateAlergia(values)
+        Router.push('/alergias');
     }
 
     return (
@@ -47,7 +46,7 @@ export default function CreateUser() {
                     borderRadius={8}
                     bg="gray.100"
                     p={["6", "8"]}
-                    onSubmit={handleSubmit(handleCreateUser)}
+                    onSubmit={handleSubmit(handleCreateAlergia)}
                 >
                     <Flex mb="8" justify="space-between" align="center">
                         <Heading size="lg" fontWeight="normal">Cadastrar Alergia</Heading>
@@ -60,8 +59,8 @@ export default function CreateUser() {
                             <Input
                                 maxW='480px'
                                 label="Nome da Alergia"
-                                error={formState.errors.name}
-                                {...register("name")}
+                                error={formState.errors.nome}
+                                {...register("nome")}
                             />
                         </SimpleGrid>
                     </VStack>

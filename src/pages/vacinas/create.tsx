@@ -12,13 +12,15 @@ import { useState } from "react";
 
 import { Select } from "../../components/Form/Select";
 import { Textarea } from "../../components/Form/Textarea";
+import { useCreateVacina } from "@/services/hooks/useVacinas";
+import Router from 'next/router';
 
 
 type CreateVacinaFormData = {
     titulo: string;
     descricao: string;
     doses: number;
-    periodicidade?: number;
+    periodicidade?: string;
     intervalo?: number;
 };
 
@@ -59,9 +61,9 @@ export default function CreateVacina() {
 
 
     const handleCreateVacina: SubmitHandler<CreateVacinaFormData> = async (values) => {
-        await new Promise(resolve => setTimeout(resolve, 2000));
-
         console.log(values);
+        await useCreateVacina(values)
+        Router.push('/vacinas');
     }
 
     return (

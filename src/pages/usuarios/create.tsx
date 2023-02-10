@@ -1,18 +1,19 @@
-import { Box, Button, Divider, Flex, Heading, HStack, SimpleGrid, VStack } from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, Heading, HStack, SimpleGrid, Stack, VStack } from "@chakra-ui/react";
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
-import Link from "next/link";
 import NextLink from 'next/link'
 
 import { Input } from "../../components/Form/Input";
 import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
-import { useState } from "react";
 
 import { Select } from "../../components/Form/Select";
-import { Textarea } from "../../components/Form/Textarea";
+import { MultiSelectUF } from "../../components/Form/MultiSelectUF";
 
+import { useUfs } from "@/services/hooks/useUF";
+import { MultiCheckbox } from "@/components/Form/MultiCheckbox";
+import { MultiSelectAlergia } from "@/components/Form/MultiSelectAlergia";
 
 type CreateUsuarioFormData = {
     id?: number;
@@ -24,6 +25,7 @@ type CreateUsuarioFormData = {
     setor: string;
     cidade: string;
     uf: string;
+    alergias: number;
 };
 
 const createUsuarioFormSchema = yup.object().shape({
@@ -49,24 +51,20 @@ export default function CreateUsuario() {
         resolver: yupResolver(createUsuarioFormSchema)
     })
 
-    // const [doseField, setDoseField] = useState('');
-    // const [intervaloField, setIntervaloField] = useState('');
-    // const [periodicidadeField, setPeriodicidadeField] = useState('');
-
-    // const handleDoseFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     setDoseField(event.target.value);
-    //     if (event.target.value <= '1') {
-    //       setIntervaloField('');
-    //       setPeriodicidadeField('');
-    //     }
-    //   };
-
+    const { data, isLoading, isFetching, error, refetch } = useUfs()
 
     const handleCreateUsuario: SubmitHandler<CreateUsuarioFormData> = async (values) => {
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        //await new Promise(resolve => setTimeout(resolve, 2000));
 
         console.log(values);
     }
+
+    const options = [
+        { value: 'option1', label: 'Opção 1' },
+        { value: 'option2', label: 'Opção 2' },
+        { value: 'option3', label: 'Opção 3' },
+      ];
+
 
     return (
 
@@ -100,12 +98,6 @@ export default function CreateUsuario() {
                                 {...register("nome")}
                                 error={formState.errors.nome}
                             />
-                            <Input
-                                label="Data de Nascimento"
-                                type="Date"
-                                {...register("dataNascimento")}
-                                error={formState.errors.dataNascimento}
-                            />
                         </SimpleGrid>
                         <SimpleGrid minChildWidth="240px" spacing={["6", "8"]} w="100%">
                             <Select
@@ -117,11 +109,14 @@ export default function CreateUsuario() {
                                 <option value="F">Feminino</option>
                                 <option value="M">Masculino</option>
                             </Select>
-
-                            {/* ALERGIAS AQUI */}
-
+                            <Input
+                                label="Data de Nascimento"
+                                type="Date"
+                                {...register("dataNascimento")}
+                                error={formState.errors.dataNascimento}
+                            />
                         </SimpleGrid>
-                    
+
                         <SimpleGrid minChildWidth="240px" spacing={["6", "8"]} w="100%">
                             <Input
                                 label="Logradouro"
@@ -149,15 +144,40 @@ export default function CreateUsuario() {
                                 {...register("cidade")}
                                 error={formState.errors.cidade}
                             />
-                            <Select
+                            <MultiSelectUF
                                 label="UF"
                                 {...register("uf")}
                                 error={formState.errors.uf}
+                            />
+
+                                    
+                            <Flex mb="8" justify="space-between" align="center">
+                        <Heading size="md" fontWeight="normal">Alergias</Heading>
+                    </Flex>
+                        </SimpleGrid>
+                    </VStack>
+                    <VStack spacing="8">
+                    
+                        <SimpleGrid minChildWidth="240px" spacing={["6", "8"]} w="100%">
+                        
+                        {/* <Select
+                                label="Alergias"
+                                {...register("alergias")}
+                                error={formState.errors.alergias}
                             >
                                 <option value="" defaultChecked></option>
                                 <option value="F">Feminino</option>
                                 <option value="M">Masculino</option>
-                            </Select>
+                            </Select> */}
+
+                        <MultiSelectAlergia
+                        label="Alergias"
+                        {...register("alergias")}
+                        error={formState.errors.alergias}
+                        
+                        />
+
+
                         </SimpleGrid>
                     </VStack>
 
@@ -170,6 +190,7 @@ export default function CreateUsuario() {
                                 type="submit"
                                 colorScheme="green"
                                 isLoading={formState.isSubmitting}
+                                
                             >
                                 Salvar
                             </Button>

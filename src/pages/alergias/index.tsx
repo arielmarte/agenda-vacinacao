@@ -5,14 +5,14 @@ import { Box, Button, ButtonGroup, Divider, Flex, Heading, Icon, Spinner, Table,
 import { RiAddLine } from "react-icons/ri";
 import { AlertDelete } from "@/components/AlertDelete";
 import { deleteAlergia, useAlergias } from "@/services/hooks/useAlergias";
-import { ModalInfo } from "@/components/ModalInfo";
 
 export default function Alergias() {
 
-    const { data, isLoading, isFetching, error } = useAlergias()
+    const { data, isLoading, isFetching, error, refetch }  = useAlergias()
 
     const handleDeleteAlergia = async (id: number) => {
         await deleteAlergia(id);
+        refetch();
       };
 
 
@@ -57,7 +57,6 @@ export default function Alergias() {
                             <Thead>
                                 <Tr>
                                     <Th>Nome</Th>
-                                    <Th textAlign='center'>Descrição</Th>
                                     <Th textAlign='center'>Excluir</Th>
                                 </Tr>
                             </Thead>
@@ -67,17 +66,13 @@ export default function Alergias() {
                                         <Tr key={alergia.id}>
 
                                             <Td>
-                                                {alergia.titulo}
+                                                {alergia.nome}
                                             </Td>
                                             
-                                            <Td textAlign='center'>
-                                                <ModalInfo title={alergia.titulo}>
-                                                    <Text>{alergia.descricao}</Text>
-                                                </ModalInfo>
-                                            </Td>
+                                            
                                             <Td textAlign='center'>
                                                 <AlertDelete idDelete={alergia.id!!} onDelete={() => handleDeleteAlergia(alergia.id!!)}>
-                                                    <Text fontWeight="bold">Deseja excluir a alergia: {alergia.titulo}?</Text>
+                                                    <Text fontWeight="bold">Deseja excluir a alergia: {alergia.nome}?</Text>
                                                 </AlertDelete>
                                             </Td>
 

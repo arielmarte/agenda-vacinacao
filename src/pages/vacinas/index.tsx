@@ -10,10 +10,11 @@ import { AlertDelete } from "@/components/AlertDelete";
 
 export default function Vacinas() {
 
-    const { data, isLoading, isFetching, error } = useVacinas()
+    const { data, isLoading, isFetching, error, refetch } = useVacinas()
 
     const handleDeleteVacina = async (id: number) => {
         await deleteVacina(id);
+        refetch();
       };
 
 

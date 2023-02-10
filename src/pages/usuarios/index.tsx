@@ -10,10 +10,11 @@ import { AlertDelete } from "@/components/AlertDelete";
 
 export default function Usuarios() {
 
-    const { data, isLoading, isFetching, error } = useUsuarios()
+    const { data, isLoading, isFetching, error, refetch } = useUsuarios()
 
     const handleDeleteUsuario = async (id: number) => {
         await deleteUsuario(id);
+        refetch();
     };
 
 
@@ -71,19 +72,19 @@ export default function Usuarios() {
                                             </Td>
                                             <Td>
                                                 {new Intl.DateTimeFormat('pt-BR').format(
-                                                    usuario.dataNascimento)
-                                                }
+                                                    new Date(usuario.dataNascimento)
+                                                )}
                                             </Td>
                                             <Td>
                                                 <Text>{usuario.sexo}</Text>
                                             </Td>
                                             <Td textAlign='center'>
-                                                <ModalInfo title={"Endereço de "+usuario.nome}>
-                                                    <Text>{"Logradouro: "+usuario.logradouro}</Text>
-                                                    <Text>{"Numero: "+usuario.numero}</Text>
-                                                    <Text>{"Setor: "+usuario.setor}</Text>
-                                                    <Text>{"Cidade: "+usuario.cidade}</Text>
-                                                    <Text>{"UF: "+usuario.uf}</Text>
+                                                <ModalInfo title={"Endereço de " + usuario.nome}>
+                                                    <Text>{"Logradouro: " + usuario.logradouro}</Text>
+                                                    <Text>{"Numero: " + usuario.numero}</Text>
+                                                    <Text>{"Setor: " + usuario.setor}</Text>
+                                                    <Text>{"Cidade: " + usuario.cidade}</Text>
+                                                    <Text>{"UF: " + usuario.uf}</Text>
                                                 </ModalInfo>
                                             </Td>
                                             <Td textAlign='center'>

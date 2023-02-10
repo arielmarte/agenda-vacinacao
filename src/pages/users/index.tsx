@@ -3,7 +3,6 @@ import { ButtonGroup, Box, Button, Checkbox, Flex, Heading, Icon, Spinner, Table
 import { RiAddLine } from "react-icons/ri";
 
 import { Header } from "../../components/Header";
-import { Pagination } from "../../components/Pagination";
 import { Sidebar } from "../../components/Sidebar";
 import { deleteUser, useUsers } from "../../services/hooks/useUsers";
 import { useState } from "react";
@@ -12,7 +11,7 @@ import { ModalInfo } from "@/components/ModalInfo";
 import { AlertDelete } from "@/components/AlertDelete";
 
 export default function UserList() {
-  const { data, isLoading, isFetching, error } = useUsers()
+  const { data, isLoading, isFetching, error, refetch } = useUsers()
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -21,6 +20,7 @@ export default function UserList() {
 
   const handleDeleteUser = async (id: string) => {
     await deleteUser(id);
+    refetch();
   };
 
   return (

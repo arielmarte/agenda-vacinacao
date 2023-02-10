@@ -27,7 +27,7 @@ export async function getVacinas(): Promise<GetVacinaResponse> {
       titulo: vacina.titulo,
       descricao: vacina.descricao,
       doses: vacina.doses,
-      periodicidade: (vacina.doses == 1 ? 'Unica' : vacina.periodicidade?.toLowerCase),
+      periodicidade: (vacina.doses == 1 ? 'ÚNICA' : vacina.periodicidade),
       intervalo: (vacina.doses == 1 ? '' : vacina.intervalo),
     };
   });

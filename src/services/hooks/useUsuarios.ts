@@ -4,7 +4,7 @@ import { api } from "../api";
 type Usuario = {
   id?: number;
   nome: string;
-  dataNascimento: Date;
+  dataNascimento: string;
   sexo: string;
   logradouro: string;
   numero: number;
@@ -28,7 +28,7 @@ export async function getUsuarios(): Promise<GetUsuarioResponse> {
     return {
       id: usuario.id,
       nome: usuario.nome,
-      data_nascimento: usuario.dataNascimento,
+      dataNascimento: usuario.dataNascimento,
       sexo: usuario.sexo,
       logradouro: usuario.logradouro,
       numero: usuario.numero,
