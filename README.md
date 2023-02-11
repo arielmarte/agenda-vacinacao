@@ -33,7 +33,7 @@ O front-end foi desenvolvido em [JavaScript](https://developer.mozilla.org/en-US
 
 ## Instruções Para Execução
 
-Para executar a aplicação, é preciso iniciar as componentes separadamente. O back-end é iniciado através de uma IDE, com as dependências Maven atualizadas, executando a classe principal do projeto Spring AgendaVacinasApplication.
+Para executar a aplicação, é preciso iniciar as componentes separadamente. O back-end (*AgendaVacinas.zip*) é iniciado através de uma IDE, com as dependências Maven atualizadas, executando a classe principal do projeto Spring AgendaVacinasApplication.
 
 Outra forma de executar o back-end é gerar o jar, executando o comando maven
 
@@ -47,7 +47,7 @@ Após a execução, um .jar da aplicação Spring é gerado e a mesma pode ser i
 
 Não há necessidade de criação de nenhuma tabela, pois toda a estrutura é gerada automaticamente pelo ORM a partir do mapeamento de Entidades.
 
-Para o front-end, é preciso ter o ambiente de execução NodeJS instalado, e então instalar o gerenciador de pacotes Yarn através do comando 
+Para o front-end (*AgendaVacinacao.zip*), é preciso ter o ambiente de execução NodeJS instalado, e então instalar o gerenciador de pacotes Yarn através do comando 
 
 > npm install yarn -g
 
