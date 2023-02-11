@@ -3,7 +3,7 @@ import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
 import { Box, Button, ButtonGroup, Divider, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Th, Thead, Tr, Text } from "@chakra-ui/react";
 import { RiAddLine, RiInformationLine } from "react-icons/ri";
-import { AlertDelete } from "@/components/AlertDelete";
+import { AlertDelete } from "@/components/Alerts/AlertDelete";
 import { deleteAgenda, useAgendas } from "@/services/hooks/useAgendas";
 import { ModalInfo } from "@/components/ModalInfo";
 
@@ -103,17 +103,21 @@ export default function Agendas() {
 
                                             <Td>
                                                 <Text fontWeight='bold'>{agenda.vacina.titulo}</Text>
-                                                <Text>{agenda.vacina.doses === 1? "Dose ÚNICA" :
-                                                    "Dose: " + agenda.numeroDose + " de "+ agenda.vacina.doses}
+                                                <Text>{agenda.vacina.doses === 1 ? "Dose ÚNICA" :
+                                                    "Dose: " + agenda.numeroDose + " de " + agenda.vacina.doses}
                                                 </Text>
-                                                
-                                                
+
+
                                                 <ModalInfo title={"Dados da Vacina"}>
                                                     <Box>
+                                                        <Text>{agenda.vacina.doses === 1 ? "Dose ÚNICA" :
+                                                            "Dose do agendamento: " + agenda.numeroDose + " de " + agenda.vacina.doses}
+                                                        </Text>
+                                                        <Divider my="3" borderColor="gray.400" />
                                                         <Text fontWeight='bold'>{"Aplicação"}</Text>
                                                         <Text>{"Título: " + agenda.vacina.titulo}</Text>
                                                         <Text>{"Doses Totais: " + agenda.vacina.doses}</Text>
-                                                        <Text>{"Intervalo: " + agenda.vacina.intervalo}</Text>
+                                                        <Text>{"Intervalo: " + agenda.vacina.intervalo} {agenda.vacina.periodicidade}</Text>
                                                         <Text>{"Descrição: " + agenda.vacina.descricao}</Text>
                                                     </Box>
 
@@ -135,12 +139,12 @@ export default function Agendas() {
                                             </Td>
 
                                             <Td textAlign='center'>
-                                                {!agenda.observacoes ? <Icon as={RiInformationLine} fontSize="20" color="gray.300" /> : 
-                                                
-                                                <ModalInfo title={"Observações do Agendamento"}>
-                                                    <Text>{agenda.observacoes}</Text>
-                                                </ModalInfo>
-                                                
+                                                {!agenda.observacoes ? <Icon as={RiInformationLine} fontSize="20" color="gray.300" /> :
+
+                                                    <ModalInfo title={"Observações do Agendamento"}>
+                                                        <Text>{agenda.observacoes}</Text>
+                                                    </ModalInfo>
+
 
                                                 }
                                             </Td>
@@ -157,9 +161,6 @@ export default function Agendas() {
                             </Tbody>
                         </Table>
                     )}
-
-
-
                 </Box>
             </Flex>
         </Box>

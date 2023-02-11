@@ -1,5 +1,11 @@
+import Alergias from "@/pages/alergias";
 import { useQuery } from "react-query";
 import { api } from "../api";
+
+type Alergia = {
+  id?: number;
+  nome?: string;
+}
 
 type Usuario = {
   id?: number;
@@ -11,6 +17,8 @@ type Usuario = {
   setor: string;
   cidade: string;
   uf: string;
+  idsAlergias?: number[];
+  alergias?: Alergia[];
 }
 
 type GetUsuarioResponse = {
@@ -23,6 +31,7 @@ type CreateUsuarioResponse = {
 
 export async function getUsuarios(): Promise<GetUsuarioResponse> {
   const { data } = await api.get('usuarios')
+console.log(data)
 
   const usuarios = data.map((usuario: Usuario) => {
     return {
@@ -34,7 +43,8 @@ export async function getUsuarios(): Promise<GetUsuarioResponse> {
       numero: usuario.numero,
       setor: usuario.setor,
       cidade: usuario.cidade,
-      uf: usuario.uf
+      uf: usuario.uf,
+      alergias: usuario.alergias
     };
   });
   console.log(usuarios);
@@ -50,6 +60,11 @@ export function useUsuarios() {
 }
 
 export async function useCreateUsuario(usuario: Usuario): Promise<CreateUsuarioResponse> {
+  console.log(usuario)
+  usuario.alergias = []
+  usuario.idsAlergias!.forEach(a => {
+    usuario.alergias!.push({"id": a})
+  });
   const { data } = await api.post('/usuarios', usuario);
 
   return {

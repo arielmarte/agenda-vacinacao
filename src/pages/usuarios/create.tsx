@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
 import NextLink from 'next/link'
+import Router from 'next/router';
 
 import { Input } from "../../components/Form/Input";
 import { Header } from "../../components/Header";
@@ -12,20 +13,20 @@ import { Select } from "../../components/Form/Select";
 import { MultiSelectUF } from "../../components/Form/MultiSelectUF";
 
 import { useUfs } from "@/services/hooks/useUF";
-import { MultiCheckbox } from "@/components/Form/MultiCheckbox";
-import { MultiSelectAlergia } from "@/components/Form/MultiSelectAlergia";
+import { MultiCheckboxAlergia } from "@/components/Form/MultiCheckboxAlergia";
+import { useCreateUsuario } from "@/services/hooks/useUsuarios";
 
 type CreateUsuarioFormData = {
     id?: number;
     nome: string;
-    dataNascimento: Date;
+    dataNascimento: string;
     sexo: string;
     logradouro: string;
     numero: number;
     setor: string;
     cidade: string;
     uf: string;
-    alergias: number;
+    idsAlergias: number;
 };
 
 const createUsuarioFormSchema = yup.object().shape({
@@ -54,9 +55,8 @@ export default function CreateUsuario() {
     const { data, isLoading, isFetching, error, refetch } = useUfs()
 
     const handleCreateUsuario: SubmitHandler<CreateUsuarioFormData> = async (values) => {
-        //await new Promise(resolve => setTimeout(resolve, 2000));
-
-        console.log(values);
+        await useCreateUsuario(values)
+        Router.push('/usuarios');
     }
 
     const options = [
@@ -106,8 +106,8 @@ export default function CreateUsuario() {
                                 error={formState.errors.sexo}
                             >
                                 <option value="" defaultChecked></option>
-                                <option value="F">Feminino</option>
-                                <option value="M">Masculino</option>
+                                <option value="Feminino">Feminino</option>
+                                <option value="Masculino">Masculino</option>
                             </Select>
                             <Input
                                 label="Data de Nascimento"
@@ -150,30 +150,16 @@ export default function CreateUsuario() {
                                 error={formState.errors.uf}
                             />
 
-                                    
-                            <Flex mb="8" justify="space-between" align="center">
-                        <Heading size="md" fontWeight="normal">Alergias</Heading>
-                    </Flex>
                         </SimpleGrid>
                     </VStack>
                     <VStack spacing="8">
                     
                         <SimpleGrid minChildWidth="240px" spacing={["6", "8"]} w="100%">
-                        
-                        {/* <Select
-                                label="Alergias"
-                                {...register("alergias")}
-                                error={formState.errors.alergias}
-                            >
-                                <option value="" defaultChecked></option>
-                                <option value="F">Feminino</option>
-                                <option value="M">Masculino</option>
-                            </Select> */}
 
-                        <MultiSelectAlergia
+                        <MultiCheckboxAlergia
                         label="Alergias"
-                        {...register("alergias")}
-                        error={formState.errors.alergias}
+                        {...register("idsAlergias")}   
+                        error={formState.errors.idsAlergias}
                         
                         />
 

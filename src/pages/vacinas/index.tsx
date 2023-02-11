@@ -5,7 +5,7 @@ import { Box, Button, ButtonGroup, Divider, Flex, Heading, Icon, Spinner, Table,
 import { RiAddLine, RiInformationLine } from "react-icons/ri";
 import { deleteVacina, useVacinas } from "@/services/hooks/useVacinas";
 import { ModalInfo } from "@/components/ModalInfo";
-import { AlertDelete } from "@/components/AlertDelete";
+import { AlertDelete } from "@/components/Alerts/AlertDelete";
 
 
 export default function Vacinas() {

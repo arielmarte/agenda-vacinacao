@@ -1,4 +1,4 @@
-import { useDisclosure, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormLabel, Input, ModalFooter, Icon } from "@chakra-ui/react"
+import { useDisclosure, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormControl, FormLabel, Input, ModalFooter, Icon, Tooltip } from "@chakra-ui/react"
 import React, { FormEvent, ReactNode } from "react"
 import { RiInformationLine } from "react-icons/ri";
 
@@ -12,8 +12,9 @@ export function ModalInfo({title, children}: ModalInfoProps) {
   
     return (
       <>
+      <Tooltip label="Mais Informações" placement="top">
         <Button onClick={onOpen}><Icon as={RiInformationLine} fontSize="20" /></Button>
-  
+        </Tooltip>
         <Modal
           isOpen={isOpen}
           onClose={onClose}

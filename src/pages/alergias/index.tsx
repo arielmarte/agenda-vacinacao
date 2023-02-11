@@ -3,7 +3,7 @@ import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
 import { Box, Button, ButtonGroup, Divider, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Th, Thead, Tr, Text } from "@chakra-ui/react";
 import { RiAddLine } from "react-icons/ri";
-import { AlertDelete } from "@/components/AlertDelete";
+import { AlertDelete } from "@/components/Alerts/AlertDelete";
 import { deleteAlergia, useAlergias } from "@/services/hooks/useAlergias";
 
 export default function Alergias() {

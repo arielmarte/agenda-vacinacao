@@ -61,7 +61,7 @@ export default function CreateVacina() {
 
 
     const handleCreateVacina: SubmitHandler<CreateVacinaFormData> = async (values) => {
-        console.log(values);
+        //console.log(values);
         await useCreateVacina(values)
         Router.push('/vacinas');
     }

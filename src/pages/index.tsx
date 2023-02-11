@@ -1,77 +1,54 @@
-import { Flex, Button, Stack } from '@chakra-ui/react'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup'
+import NextLink from "next/link";
+import { Header } from "@/components/Header";
+import { Sidebar } from "@/components/Sidebar";
+import { Box, Button, ButtonGroup, Divider, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Th, Thead, Tr, Text, HStack, VStack } from "@chakra-ui/react";
+import { RiAddLine, RiInformationLine } from "react-icons/ri";
+import { deleteUsuario, useUsuarios } from "@/services/hooks/useUsuarios";
+import { ModalInfo } from "@/components/ModalInfo";
+import { AlertDelete } from "@/components/Alerts/AlertDelete";
 
-import { Input } from '../components/Form/Input'
 
-type SignInFormData = {
-  email: string;
-  password: string;
-};
+export default function Usuarios() {
 
-const signInFormSchema = yup.object().shape({
-  email: yup.string().required('E-mail obrigatório').email('E-mail inválido'),
-  password: yup.string().required('Senha obrigatória'),
-})
+    const { data, isLoading, isFetching, error, refetch } = useUsuarios()
 
-export default function SignIn() {
-  const { register, handleSubmit, formState } = useForm<SignInFormData>({
-    resolver: yupResolver(signInFormSchema)
-  })
+    const handleDeleteUsuario = async (id: number) => {
+        await deleteUsuario(id);
+        refetch();
+    };
 
-  // const { errors } = formState
 
-  const handleSignIn: SubmitHandler<SignInFormData> = async (values) => {
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    return (
+        <Box>
+            <Header />
 
-    console.log(values);
-  }
+            <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
+                <Sidebar />
 
-  return (
-    <Flex
-      w="100vw"
-      h="100vh"
-      align="center"
-      justify="center"
-    >
-      <Flex
-        as="form"
-        width="100%"
-        maxWidth={360}
-        bg="gray.800"
-        p="8"
-        borderRadius={8}
-        flexDir="column"
-        onSubmit={handleSubmit(handleSignIn)}
-      >
-        <Stack spacing="4">
-          <Input 
-           
-            type="email" 
-            label="E-mail" 
-            // error={errors.email}
-            {...register('email')}
-          />
-          <Input 
-             
-            type="password" 
-            label="Senha" 
-            // error={errors.password}
-            {...register('password')}
-          />
-        </Stack>
+                <Box flex="1" borderRadius={8} bg="gray.100" p="8">
 
-        <Button
-          type="submit"
-          mt="6"
-          colorScheme="pink"
-          size="lg"
-          isLoading={formState.isSubmitting}
-        >
-          Entrar
-        </Button>
-      </Flex>
-    </Flex>
-  )
+                    <Flex mb="8" justify="center" align="center">
+                        <Heading size="lg" fontWeight="normal">Projeto Web - Agenda de Vacinação</Heading>
+
+                    </Flex>
+                    <Divider my="6" borderColor="gray.400" />
+                    <Flex justify="center">
+                    <VStack spacing="4">
+                            <Text>
+                                Projeto desenvolvido como trabalho final da disciplina de Software para Persistência de Dados, no semestre 2022/2 do curso de Engenharia de Software da Universidade Federal de Goiás, por:
+                                <br />  • <strong>Ariel Marte Araújo Silva (201900264)</strong>
+                                <br />  • <strong>Marco Feitosa Araújo (201905542)</strong>
+                                <br/>
+                            </Text>
+                            <Heading size="md" fontWeight="normal">Descrição do Projeto</Heading>
+                            <Text>
+                                <br/>Aplicação para agendamento de vacinas, com back-end em Java Spring Boot e front-end em React.
+                                A aplicação permite cadastro, consulta e remoção de usuários, alergias, vacinas e agendamentos. Há opções de listagem completa para todas as tabelas, agendas com opção de listagem por *Canceladas* ou *Realizadas*, listagem de agendas por dia, agendamentos por usuário, e a opção de “dar baixa” em uma agenda (definindo-a como *Realizada* ou *Cancelada*).
+                            </Text>
+                    </VStack>
+                    </Flex>
+                </Box>
+            </Flex>
+        </Box>
+    )
 }

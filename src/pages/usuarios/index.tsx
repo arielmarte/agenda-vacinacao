@@ -5,7 +5,7 @@ import { Box, Button, ButtonGroup, Divider, Flex, Heading, Icon, Spinner, Table,
 import { RiAddLine, RiInformationLine } from "react-icons/ri";
 import { deleteUsuario, useUsuarios } from "@/services/hooks/useUsuarios";
 import { ModalInfo } from "@/components/ModalInfo";
-import { AlertDelete } from "@/components/AlertDelete";
+import { AlertDelete } from "@/components/Alerts/AlertDelete";
 
 
 export default function Usuarios() {
@@ -59,6 +59,8 @@ export default function Usuarios() {
                                     <Th>Data de Nascimento</Th>
                                     <Th>Sexo</Th>
                                     <Th textAlign='center'>Endereço</Th>
+                                    <Th textAlign='center'>Alergias</Th>
+                                    <Th textAlign='center'>Agendamentos</Th>
                                     <Th textAlign='center'>Excluir</Th>
                                 </Tr>
                             </Thead>
@@ -87,10 +89,43 @@ export default function Usuarios() {
                                                     <Text>{"UF: " + usuario.uf}</Text>
                                                 </ModalInfo>
                                             </Td>
+
                                             <Td textAlign='center'>
+                                                {!usuario.alergias ? (
+                                                    <Icon as={RiInformationLine} fontSize="20" color="gray.300" />
+                                                ) : (
+                                                    <ModalInfo title={"Alergias de "+usuario.nome}>
+                                                        {usuario.alergias
+                                                            .map(alergia => {
+                                                                return <Text key={alergia.id}>{alergia.nome}</Text>;
+                                                            })
+                                                        }
+                                                    </ModalInfo>
+                                                )}
+                                            </Td>
+
+                                            <Td textAlign='center'>
+                                                {/* {!usuario.agendas ? (
+                                                    <Icon as={RiInformationLine} fontSize="20" color="gray.300" />
+                                                ) : (
+                                                    <ModalInfo title={"Alergias de "+usuario.nome}>
+                                                        {usuario.alergias
+                                                            .map(alergia => {
+                                                                return <Text key={alergia.id}>{alergia.nome}</Text>;
+                                                            })
+                                                        }
+                                                    </ModalInfo>
+                                                )} */}
+                                            </Td>
+
+
+
+                                            <Td textAlign='center'>
+                                            
                                                 <AlertDelete idDelete={usuario.id!!} onDelete={() => handleDeleteUsuario(usuario.id!!)}>
                                                     <Text fontWeight="bold">Deseja excluir a usuario: {usuario.nome}?</Text>
                                                 </AlertDelete>
+                                            
                                             </Td>
 
                                         </Tr>

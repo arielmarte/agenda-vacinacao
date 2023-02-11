@@ -1,4 +1,4 @@
-import { Text, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useDisclosure, Icon } from "@chakra-ui/react"
+import { Text, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useDisclosure, Icon, Tooltip } from "@chakra-ui/react"
 import React, { ReactNode } from "react"
 import { RiDeleteBin7Line } from "react-icons/ri";
 
@@ -19,9 +19,12 @@ export function AlertDelete({idDelete, children, onDelete}: AlertDeleteProps) {
 
     return (
       <>
+      <Tooltip label="Excluir" placement="top">
         <Button onClick={onOpen}>
+      
         <Icon color='red' as={RiDeleteBin7Line} fontSize="20" />
         </Button>
+        </Tooltip>
   
         <AlertDialog
           isOpen={isOpen}
