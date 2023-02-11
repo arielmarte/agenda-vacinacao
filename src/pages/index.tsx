@@ -43,7 +43,7 @@ export default function Usuarios() {
                             <Heading size="md" fontWeight="normal">Descrição do Projeto</Heading>
                             <Text>
                                 <br/>Aplicação para agendamento de vacinas, com back-end em Java Spring Boot e front-end em React.
-                                A aplicação permite cadastro, consulta e remoção de usuários, alergias, vacinas e agendamentos. Há opções de listagem completa para todas as tabelas, agendas com opção de listagem por *Canceladas* ou *Realizadas*, listagem de agendas por dia, agendamentos por usuário, e a opção de “dar baixa” em uma agenda (definindo-a como *Realizada* ou *Cancelada*).
+                                A aplicação permite cadastro, consulta e remoção de usuários, alergias, vacinas e agendamentos. Há opções de listagem completa para todas as tabelas, agendas com opção de listagem por <strong>Canceladas</strong> ou <strong>Realizadas</strong>, listagem de agendas por dia, agendamentos por usuário, e a opção de “dar baixa” em uma agenda (definindo-a como <strong>Canceladas</strong> ou <strong>Realizadas</strong>).
                             </Text>
                     </VStack>
                     </Flex>

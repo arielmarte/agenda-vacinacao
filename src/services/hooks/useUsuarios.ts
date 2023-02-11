@@ -13,7 +13,7 @@ type Usuario = {
   dataNascimento: string;
   sexo: string;
   logradouro: string;
-  numero: number;
+  numeroLogradouro: number;
   setor: string;
   cidade: string;
   uf: string;
@@ -40,7 +40,7 @@ console.log(data)
       dataNascimento: usuario.dataNascimento,
       sexo: usuario.sexo,
       logradouro: usuario.logradouro? usuario.logradouro : '',
-      numero: usuario.numero? usuario.numero : '',
+      numeroLogradouro: usuario.numeroLogradouro? usuario.numeroLogradouro : '',
       setor: usuario.setor? usuario.setor : '',
       cidade: usuario.cidade? usuario.cidade : '',
       uf: usuario.uf? usuario.uf : '',

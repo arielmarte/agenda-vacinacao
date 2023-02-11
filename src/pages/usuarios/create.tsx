@@ -22,7 +22,7 @@ type CreateUsuarioFormData = {
     dataNascimento: string;
     sexo: string;
     logradouro: string;
-    numero: number;
+    numeroLogradouro: number;
     setor: string;
     cidade: string;
     uf: string;
@@ -122,8 +122,8 @@ export default function CreateUsuario() {
                             <Input
                                 label="Numero"
                                 type="Number"
-                                {...register("numero")}
-                                error={formState.errors.numero}
+                                {...register("numeroLogradouro")}
+                                error={formState.errors.numeroLogradouro}
                             />
                         </SimpleGrid>
                         <SimpleGrid minChildWidth="240px" spacing={["6", "8"]} w="100%">

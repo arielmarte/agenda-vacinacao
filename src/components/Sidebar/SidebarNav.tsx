@@ -17,7 +17,7 @@ export function SidebarNav() {
       </NavSection>
       
       <NavSection title="DADOS">
-        <NavLink icon={TbUser} href="/usuarios">Pacientes</NavLink>
+        <NavLink icon={TbUser} href="/usuarios">Usuários</NavLink>
         <NavLink icon={TbVaccine} href="/vacinas">Vacinas</NavLink>
         <NavLink icon={TbHeartPlus} href="/alergias">Alergias</NavLink>
       </NavSection>

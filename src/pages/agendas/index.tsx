@@ -118,7 +118,13 @@ export default function Agendas() {
                                                         <Text>{"Nome: " + agenda.usuario!.nome}</Text>
                                                         <Text>{"Data de Nascimento: " + new Intl.DateTimeFormat('pt-BR').format(new Date(agenda.usuario!.dataNascimento!))}</Text>
                                                         <Text>{"Sexo: " + agenda.usuario!.sexo}</Text>
-                                                        <Text>{"Alergia: " + agenda.usuario!.alergia}</Text>
+                                                        <Text>{"Alergias: " }</Text>
+
+                                                        {agenda.usuario!.alergias
+                                                            .map(alergia => {
+                                                                return <Text key={alergia.id}>- {alergia.nome}</Text>;
+                                                            })
+                                                        }
 
                                                     </Box>
                                                     <Divider my="3" borderColor="gray.400" />

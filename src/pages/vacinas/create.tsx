@@ -136,7 +136,7 @@ export default function CreateVacina() {
                                 <option value="" defaultChecked></option>
                                 <option value="DIAS">dia(s)</option>
                                 <option value="SEMANAS">semana(s)</option>
-                                <option value="MESES">mese(s)</option>
+                                <option value="MESES">mes(es)</option>
                                 <option value="ANOS">ano(s)</option>
                             </Select>
 

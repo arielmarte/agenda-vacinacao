@@ -14,6 +14,7 @@ import { useCreateAgenda } from "@/services/hooks/useAgendas";
 import { MultiSelectUsuario } from "@/components/Form/MultiSelectUsuario";
 import { MultiSelectVacina } from "@/components/Form/MultiSelectVacina";
 import { useState } from "react";
+import { Textarea } from "@/components/Form/Textarea";
 
 type ErrorMessage = {
     message: string;
@@ -24,6 +25,7 @@ type CreateAgendaFormData = {
     hora: string;
     idUsuario: number;
     idVacina: number;
+    observacoes: string;
 };
 
 const createAgendaFormSchema = yup.object().shape({
@@ -126,6 +128,15 @@ export default function CreateAgenda() {
 
 
                         </SimpleGrid>
+
+                        <SimpleGrid minChildWidth="240px" spacing={["6", "8"]} w="100%">
+                        <Textarea
+                                label="Observações"
+
+                                {...register("observacoes")}
+                                error={formState.errors.observacoes}
+                            />
+                            </SimpleGrid>
                     </VStack>
                     <Flex mt="8" justify="flex-end">
                         <HStack spacing="4">

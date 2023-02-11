@@ -117,7 +117,7 @@ export default function Usuarios() {
                                             <Td textAlign='center'>
                                                 <ModalInfo title={"Endereço de " + usuario.nome}>
                                                     <Text>{"Logradouro: " + usuario.logradouro}</Text>
-                                                    <Text>{"Numero: " + usuario.numero}</Text>
+                                                    <Text>{"Numero: " + usuario.numeroLogradouro}</Text>
                                                     <Text>{"Setor: " + usuario.setor}</Text>
                                                     <Text>{"Cidade: " + usuario.cidade}</Text>
                                                     <Text>{"UF: " + usuario.uf}</Text>
