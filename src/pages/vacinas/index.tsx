@@ -1,21 +1,29 @@
+
+
 import NextLink from "next/link";
 import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
-import { Box, Button, ButtonGroup, Divider, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Th, Thead, Tr, Text } from "@chakra-ui/react";
+import { Box, Button, ButtonGroup, Divider, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Th, Thead, Tr, Text, Alert, AlertIcon, AlertDescription, AlertTitle, CloseButton } from "@chakra-ui/react";
 import { RiAddLine, RiInformationLine } from "react-icons/ri";
 import { deleteVacina, useVacinas } from "@/services/hooks/useVacinas";
 import { ModalInfo } from "@/components/ModalInfo";
 import { AlertDelete } from "@/components/Alerts/AlertDelete";
+import { useState } from "react";
 
+type ErrorMessage = {
+    message: string;
+};
 
 export default function Vacinas() {
+
+    const [errorMessage, setErrorMessage] = useState<ErrorMessage>({ message: "" });
 
     const { data, isLoading, isFetching, error, refetch } = useVacinas()
 
     const handleDeleteVacina = async (id: number) => {
-        await deleteVacina(id);
+        await deleteVacina(id).catch(error => setErrorMessage({ message: error.response.data.detail }));
         refetch();
-      };
+    };
 
 
     return (
@@ -43,6 +51,24 @@ export default function Vacinas() {
                         </ButtonGroup>
                     </Flex>
                     <Divider my="6" borderColor="gray.400" />
+                    {errorMessage.message !== "" && (
+                        <Alert status='error'  >
+                            <AlertIcon />
+                            <Box>
+                                <AlertTitle>Ocorreu um erro</AlertTitle>
+                                <AlertDescription>
+                                    {errorMessage.message}
+                                </AlertDescription>
+                            </Box>
+                            <CloseButton
+                                alignSelf='flex-end'
+                                position='absolute'
+                                right={1}
+                                top={1}
+                                onClick={() => setErrorMessage({ message: "" })}
+                            />
+                        </Alert>
+                    )}
                     {isLoading ? (
                         <Flex justify="center">
                             <Spinner />
@@ -52,6 +78,7 @@ export default function Vacinas() {
                             <Text>Falha ao obter dados.</Text>
                         </Flex>
                     ) : (
+
                         <Table colorScheme="whiteAlpha">
                             <Thead>
                                 <Tr>
@@ -88,10 +115,12 @@ export default function Vacinas() {
                                             </Td>
 
                                         </Tr>
+
                                     )
                                 })}
                             </Tbody>
                         </Table>
+
                     )}
                 </Box>
             </Flex>

@@ -2,6 +2,7 @@ import { forwardRef, ForwardRefRenderFunction } from "react";
 import { FieldError } from 'react-hook-form'
 import { FormControl, FormErrorMessage, FormLabel, Select as ChakraSelect, SelectProps as ChakraSelectProps } from "@chakra-ui/react";
 import { useUfs } from "@/services/hooks/useUF";
+import { useUsuarios } from "@/services/hooks/useUsuarios";
 
 interface SelectProps extends ChakraSelectProps {
   name: string;
@@ -11,7 +12,7 @@ interface SelectProps extends ChakraSelectProps {
 
 const SelectBase: ForwardRefRenderFunction<HTMLSelectElement, SelectProps> 
   = ({ name, label, error = null, ...rest }, ref) => {
-    const { data, isLoading, isFetching, refetch } = useUfs()
+    const { data, isLoading, isFetching, refetch } = useUsuarios()
 
     if (!data) return null;
 
@@ -34,8 +35,8 @@ const SelectBase: ForwardRefRenderFunction<HTMLSelectElement, SelectProps>
           {...rest}
         >
           <option value="" defaultChecked></option>
-            {data.ufs && data.ufs.map(uf => (
-                                        <option key={uf.sigla} value={uf.sigla}>{uf.nome}</option>
+            {data.usuarios && data.usuarios.map(usuario => (
+                                        <option key={usuario.id} value={usuario.id}>{usuario.nome}</option>
                                     ))}
         </ChakraSelect>
 
@@ -48,4 +49,4 @@ const SelectBase: ForwardRefRenderFunction<HTMLSelectElement, SelectProps>
     );
   }
 
-  export const MultiSelectUF = forwardRef(SelectBase);
+  export const MultiSelectUsuario = forwardRef(SelectBase);

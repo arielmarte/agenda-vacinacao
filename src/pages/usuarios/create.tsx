@@ -30,21 +30,16 @@ type CreateUsuarioFormData = {
 };
 
 const createUsuarioFormSchema = yup.object().shape({
-    // titulo: yup.string().required('Título é obrigatório').max(60, 'Título deve ter no máximo 60 caracteres'),
-    // descricao: yup.string().max(200, 'Descrição deve ter no máximo 200 caracteres'),
-    // doses: yup.number().transform((value) => (isNaN(value) ? undefined : value)).required('Número de Doses é obrigatório').min(1, 'Dose deve ser no mínimo 1'),
-    // intervalo: yup.number().when('doses', {
-    //     is: (doses: number) => doses > 1,
-    //     then: yup.number().typeError('Número de Doses é obrigatório').required('Necessário definir intervalo').min(1, 'Intervalo deve ser no mínimo 1'),
-    //     otherwise: yup.number().transform((value) => (isNaN(value) ? undefined : value)).nullable()
-    // }),
 
-    // periodicidade: yup.string().when('doses', {
-    //     is: (doses: number) => doses > 1,
-    //     then: yup.string().required('Necessário definir periodicidade').oneOf(['DIAS', 'SEMANAS', 'MESES', 'ANOS'], 'Necessário definir periodicidade'),
-    //     otherwise: yup.string().notRequired(),
-    // }),
-
+    nome: yup.string().required('Nome é obrigatório').max(60, 'Nome deve ter no máximo 60 caracteres'),
+    dataNascimento: yup.string().required('Data de nascimento é obrigatório'),
+    sexo: yup.string().required('Sexo é obrigatório').max(10, 'Sexo deve ter no máximo 10 caracteres'),
+    logradouro: yup.string().max(60, 'Logradouro deve ter no máximo 60 caracteres'),
+    numero: yup.number().transform((value) => (isNaN(value) ? undefined : value)),
+    setor: yup.string().max(40, 'Setor deve ter no máximo 40 caracteres'),
+    cidade: yup.string().max(40, 'Setor deve ter no máximo 40 caracteres'),
+    uf: yup.string(),
+    //idsAlergias: yup.array().nullable()
 });
 
 export default function CreateUsuario() {
@@ -151,9 +146,6 @@ export default function CreateUsuario() {
                             />
 
                         </SimpleGrid>
-                    </VStack>
-                    <VStack spacing="8">
-                    
                         <SimpleGrid minChildWidth="240px" spacing={["6", "8"]} w="100%">
 
                         <MultiCheckboxAlergia
@@ -165,6 +157,10 @@ export default function CreateUsuario() {
 
 
                         </SimpleGrid>
+                    </VStack>
+                    <VStack spacing="8">
+                    
+                        
                     </VStack>
 
                     <Flex mt="8" justify="flex-end">

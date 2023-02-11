@@ -1,28 +1,28 @@
 import { Text, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useDisclosure, Icon, Tooltip } from "@chakra-ui/react"
 import React, { ReactNode } from "react"
-import { RiDeleteBin7Line } from "react-icons/ri";
+import { MdCancelPresentation } from "react-icons/md";
 
-interface AlertDeleteProps {
-  idDelete: number | string;
+interface AlertCancelarProps {
+  idCancelar: number | string;
   children: ReactNode;
-  onDelete: (id: number | string) => void;
+  onCancelar: (id: number | string) => void;
 }
 
-export function AlertDelete({idDelete, children, onDelete}: AlertDeleteProps) {
+export function AlertCancelar({idCancelar, children, onCancelar}: AlertCancelarProps) {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const cancelRef = React.useRef<HTMLButtonElement>(null)
 
-    const handleDelete = () => {
+    const handleCancelar = () => {
       onClose()
-      onDelete(idDelete)
+      onCancelar(idCancelar)
     }
 
     return (
       <>
-      <Tooltip label="Excluir" placement="top">
+      <Tooltip label="Cancelar" placement="top">
         <Button onClick={onOpen}>
       
-        <Icon color='red' as={RiDeleteBin7Line} fontSize="20" />
+        <Icon color='orange.500' as={MdCancelPresentation} fontSize="20" />
         </Button>
         </Tooltip>
   
@@ -34,7 +34,7 @@ export function AlertDelete({idDelete, children, onDelete}: AlertDeleteProps) {
           <AlertDialogOverlay>
             <AlertDialogContent>
               <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                Confirmação de Exclusão
+                Confirmação de Cancelamento
               </AlertDialogHeader>
   
               <AlertDialogBody>
@@ -44,10 +44,10 @@ export function AlertDelete({idDelete, children, onDelete}: AlertDeleteProps) {
   
               <AlertDialogFooter>
                 <Button ref={cancelRef} onClick={onClose}>
-                  Cancelar
+                  Voltar
                 </Button>
-                <Button colorScheme='red' onClick={handleDelete} ml={3}>
-                  Excluir
+                <Button colorScheme='orange' onClick={handleCancelar} ml={3}>
+                  Confirmar
                 </Button>
               </AlertDialogFooter>
             </AlertDialogContent>

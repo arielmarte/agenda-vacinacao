@@ -1,22 +1,38 @@
 import NextLink from "next/link";
+import { useRouter } from 'next/router';
 import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
-import { Box, Button, ButtonGroup, Divider, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Th, Thead, Tr, Text } from "@chakra-ui/react";
+import { Box, Button, ButtonGroup, Divider, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Th, Thead, Tr, Text, Alert, AlertDescription, AlertIcon, AlertTitle, CloseButton } from "@chakra-ui/react";
 import { RiAddLine, RiInformationLine } from "react-icons/ri";
 import { deleteUsuario, useUsuarios } from "@/services/hooks/useUsuarios";
 import { ModalInfo } from "@/components/ModalInfo";
 import { AlertDelete } from "@/components/Alerts/AlertDelete";
+import { useState } from "react";
+import { BsCalendar2 } from "react-icons/bs";
 
+type ErrorMessage = {
+    message: string;
+};
 
 export default function Usuarios() {
+
+    const [errorMessage, setErrorMessage] = useState<ErrorMessage>({ message: "" });
 
     const { data, isLoading, isFetching, error, refetch } = useUsuarios()
 
     const handleDeleteUsuario = async (id: number) => {
-        await deleteUsuario(id);
+        await deleteUsuario(id).catch(error => setErrorMessage({ message: error.response.data.detail }));
         refetch();
     };
 
+    const router = useRouter();
+    function handleRedirect(id: number, nome: string) {
+        router.push({
+            pathname: '/usuarios/agendaUsuario',
+            query: { id: id , nome: nome },
+        });
+    }
+    //const { id } = router.query;
 
     return (
         <Box>
@@ -43,6 +59,24 @@ export default function Usuarios() {
                         </ButtonGroup>
                     </Flex>
                     <Divider my="6" borderColor="gray.400" />
+                    {errorMessage.message !== "" && (
+                        <Alert status='error'  >
+                            <AlertIcon />
+                            <Box>
+                                <AlertTitle>Ocorreu um erro</AlertTitle>
+                                <AlertDescription>
+                                    {errorMessage.message}
+                                </AlertDescription>
+                            </Box>
+                            <CloseButton
+                                alignSelf='flex-end'
+                                position='absolute'
+                                right={1}
+                                top={1}
+                                onClick={() => setErrorMessage({ message: "" })}
+                            />
+                        </Alert>
+                    )}
                     {isLoading ? (
                         <Flex justify="center">
                             <Spinner />
@@ -94,7 +128,7 @@ export default function Usuarios() {
                                                 {!usuario.alergias ? (
                                                     <Icon as={RiInformationLine} fontSize="20" color="gray.300" />
                                                 ) : (
-                                                    <ModalInfo title={"Alergias de "+usuario.nome}>
+                                                    <ModalInfo title={"Alergias de " + usuario.nome}>
                                                         {usuario.alergias
                                                             .map(alergia => {
                                                                 return <Text key={alergia.id}>{alergia.nome}</Text>;
@@ -105,27 +139,17 @@ export default function Usuarios() {
                                             </Td>
 
                                             <Td textAlign='center'>
-                                                {/* {!usuario.agendas ? (
-                                                    <Icon as={RiInformationLine} fontSize="20" color="gray.300" />
-                                                ) : (
-                                                    <ModalInfo title={"Alergias de "+usuario.nome}>
-                                                        {usuario.alergias
-                                                            .map(alergia => {
-                                                                return <Text key={alergia.id}>{alergia.nome}</Text>;
-                                                            })
-                                                        }
-                                                    </ModalInfo>
-                                                )} */}
+                                                <Button onClick={() => handleRedirect(usuario.id!, usuario.nome!)} colorScheme="green">
+                                                    <Icon color='white' as={BsCalendar2} fontSize="20" />
+                                                </Button>
                                             </Td>
 
 
-
                                             <Td textAlign='center'>
-                                            
                                                 <AlertDelete idDelete={usuario.id!!} onDelete={() => handleDeleteUsuario(usuario.id!!)}>
                                                     <Text fontWeight="bold">Deseja excluir a usuario: {usuario.nome}?</Text>
                                                 </AlertDelete>
-                                            
+
                                             </Td>
 
                                         </Tr>

@@ -25,7 +25,7 @@ export async function getVacinas(): Promise<GetVacinaResponse> {
     return {
       id: vacina.id,
       titulo: vacina.titulo,
-      descricao: vacina.descricao,
+      descricao: vacina.descricao? vacina.descricao : '',
       doses: vacina.doses,
       periodicidade: (vacina.doses == 1 ? 'ÚNICA' : vacina.periodicidade),
       intervalo: (vacina.doses == 1 ? '' : vacina.intervalo),
@@ -54,3 +54,4 @@ export async function useCreateVacina(vacina: Vacina): Promise<CreateVacinaRespo
 export async function deleteVacina(id: number) {
   await api.delete(`vacinas/${id}`);
 }
+

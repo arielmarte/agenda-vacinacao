@@ -4,7 +4,7 @@ import { Sidebar } from "@/components/Sidebar";
 import { Box, Button, ButtonGroup, Divider, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Th, Thead, Tr, Text, Alert, AlertDescription, AlertIcon, AlertTitle, CloseButton } from "@chakra-ui/react";
 import { RiAddLine, RiInformationLine } from "react-icons/ri";
 import { AlertDelete } from "@/components/Alerts/AlertDelete";
-import { deleteAgenda, useAgendas, atualizarSituacaoAgenda } from "@/services/hooks/useAgendas";
+import { deleteAgenda, useAgendas, atualizarSituacaoAgenda, useAgendasSituacao } from "@/services/hooks/useAgendas";
 import { ModalInfo } from "@/components/ModalInfo";
 import { AlertCancelar } from "@/components/Alerts/AlertCancelar";
 import { AlertRealizar } from "@/components/Alerts/AlertRealizar";
@@ -18,7 +18,7 @@ export default function Agendas() {
 
     const [errorMessage, setErrorMessage] = useState<ErrorMessage>({ message: "" });
 
-    const { data, isLoading, isFetching, error, refetch } = useAgendas()
+    const { data, isLoading, isFetching, error, refetch } = useAgendasSituacao("CANCELADO")
 
     const handleDeleteAgenda = async (id: number) => {
         await deleteAgenda(id).catch(error => setErrorMessage({ message: error.response.data.detail }));
@@ -183,18 +183,6 @@ export default function Agendas() {
                                             </Td>
 
                                             <Td textAlign='center'>
-                                                <AlertCancelar idCancelar={agenda.id!!} onCancelar={() => handleAtualizarSituacaoAgenda(agenda.id!!, "CANCELADO")}>
-                                                    <Text fontWeight="bold">Deseja Cancelar o agendamento do dia: {new Intl.DateTimeFormat('pt-BR').format(
-                                                    new Date(agenda.data))} - {agenda.hora}?</Text>
-                                                    <Text>Todos os agendamentos posteriores serão cancelados!</Text>
-                                                </AlertCancelar>
-                                                
-                                                <AlertRealizar idRealizar={agenda.id!!} onRealizar={() => handleAtualizarSituacaoAgenda(agenda.id!!, "REALIZADO")}>
-                                                    <Text fontWeight="bold">Deseja confirmar a realização do agendamento do dia: {new Intl.DateTimeFormat('pt-BR').format(
-                                                    new Date(agenda.data))} - {agenda.hora}?</Text>
-                                                </AlertRealizar>
-
-
                                                 <AlertDelete idDelete={agenda.id!!} onDelete={() => handleDeleteAgenda(agenda.id!!)}>
                                                     <Text fontWeight="bold">Deseja excluir o agendamento do dia: {new Intl.DateTimeFormat('pt-BR').format(
                                                     new Date(agenda.data))} - {agenda.hora}?</Text>

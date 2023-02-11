@@ -4,11 +4,12 @@ import { Sidebar } from "@/components/Sidebar";
 import { Box, Button, ButtonGroup, Divider, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Th, Thead, Tr, Text, Alert, AlertDescription, AlertIcon, AlertTitle, CloseButton } from "@chakra-ui/react";
 import { RiAddLine, RiInformationLine } from "react-icons/ri";
 import { AlertDelete } from "@/components/Alerts/AlertDelete";
-import { deleteAgenda, useAgendas, atualizarSituacaoAgenda } from "@/services/hooks/useAgendas";
+import { deleteAgenda, useAgendas, atualizarSituacaoAgenda, useAgendasHoje, useAgendasUsuario } from "@/services/hooks/useAgendas";
 import { ModalInfo } from "@/components/ModalInfo";
 import { AlertCancelar } from "@/components/Alerts/AlertCancelar";
 import { AlertRealizar } from "@/components/Alerts/AlertRealizar";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 type ErrorMessage = {
     message: string;
@@ -16,9 +17,14 @@ type ErrorMessage = {
 
 export default function Agendas() {
 
+    const router = useRouter();
+
+    const userId = Number(router.query.id);
+    const userNome = router.query.nome;
+
     const [errorMessage, setErrorMessage] = useState<ErrorMessage>({ message: "" });
 
-    const { data, isLoading, isFetching, error, refetch } = useAgendas()
+    const { data, isLoading, isFetching, error, refetch } = useAgendasUsuario(userId)
 
     const handleDeleteAgenda = async (id: number) => {
         await deleteAgenda(id).catch(error => setErrorMessage({ message: error.response.data.detail }));
@@ -43,19 +49,8 @@ export default function Agendas() {
                 <Box flex="1" borderRadius={8} bg="gray.100" p="8">
 
                     <Flex mb="8" justify="space-between" align="center">
-                        <Heading size="lg" fontWeight="normal">Agendas</Heading>
-                        <ButtonGroup>
-                            <Button
-                                as={NextLink}
-                                href="/agendas/create"
-                                size="sm"
-                                fontSize="sm"
-                                colorScheme="green"
-                                leftIcon={<Icon as={RiAddLine} fontSize="20" />}
-                            >
-                                Adicionar
-                            </Button>
-                        </ButtonGroup>
+                        <Heading size="lg" fontWeight="normal">Agendas de {userNome}</Heading>
+
                     </Flex>
                     <Divider my="6" borderColor="gray.400" />
                     {errorMessage.message !== "" && (
@@ -110,48 +105,48 @@ export default function Agendas() {
                                             </Td>
 
                                             <Td>
-                                                <Text>{agenda.usuario!.nome}</Text>
+                                                <Text>{agenda.usuario.nome}</Text>
 
                                                 <ModalInfo title={"Dados do Paciente"}>
                                                     <Box>
                                                         <Text fontWeight='bold'>{"Dados Pessoais"}</Text>
-                                                        <Text>{"Nome: " + agenda.usuario!.nome}</Text>
-                                                        <Text>{"Data de Nascimento: " + new Intl.DateTimeFormat('pt-BR').format(new Date(agenda.usuario!.dataNascimento!))}</Text>
-                                                        <Text>{"Sexo: " + agenda.usuario!.sexo}</Text>
-                                                        <Text>{"Alergia: " + agenda.usuario!.alergia}</Text>
+                                                        <Text>{"Nome: " + agenda.usuario.nome}</Text>
+                                                        <Text>{"Data de Nascimento: " + new Intl.DateTimeFormat('pt-BR').format(new Date(agenda.usuario.dataNascimento))}</Text>
+                                                        <Text>{"Sexo: " + agenda.usuario.sexo}</Text>
+                                                        <Text>{"Alergia: " + agenda.usuario.alergia}</Text>
 
                                                     </Box>
                                                     <Divider my="3" borderColor="gray.400" />
                                                     <Box>
                                                         <Text fontWeight='bold' whiteSpace="pre-line">{"Endereço"}</Text>
-                                                        <Text>{"Logradouro: " + agenda.usuario!.logradouro}</Text>
-                                                        <Text>{"Numero: " + agenda.usuario!.numeroLogradouro}</Text>
-                                                        <Text>{"Setor: " + agenda.usuario!.setor}</Text>
-                                                        <Text>{"Cidade: " + agenda.usuario!.cidade}</Text>
-                                                        <Text>{"UF: " + agenda.usuario!.uf}</Text>
+                                                        <Text>{"Logradouro: " + agenda.usuario.logradouro}</Text>
+                                                        <Text>{"Numero: " + agenda.usuario.numeroLogradouro}</Text>
+                                                        <Text>{"Setor: " + agenda.usuario.setor}</Text>
+                                                        <Text>{"Cidade: " + agenda.usuario.cidade}</Text>
+                                                        <Text>{"UF: " + agenda.usuario.uf}</Text>
                                                     </Box>
                                                 </ModalInfo>
 
                                             </Td>
 
                                             <Td>
-                                                <Text fontWeight='bold'>{agenda.vacina!.titulo}</Text>
-                                                <Text>{agenda.vacina!.doses === 1 ? "Dose ÚNICA" :
-                                                    "Dose: " + agenda.numeroDose + " de " + agenda.vacina!.doses}
+                                                <Text fontWeight='bold'>{agenda.vacina.titulo}</Text>
+                                                <Text>{agenda.vacina.doses === 1 ? "Dose ÚNICA" :
+                                                    "Dose: " + agenda.numeroDose + " de " + agenda.vacina.doses}
                                                 </Text>
 
 
                                                 <ModalInfo title={"Dados da Vacina"}>
                                                     <Box>
-                                                        <Text>{agenda.vacina!.doses === 1 ? "Dose ÚNICA" :
-                                                            "Dose do agendamento: " + agenda.numeroDose + " de " + agenda.vacina!.doses}
+                                                        <Text>{agenda.vacina.doses === 1 ? "Dose ÚNICA" :
+                                                            "Dose do agendamento: " + agenda.numeroDose + " de " + agenda.vacina.doses}
                                                         </Text>
                                                         <Divider my="3" borderColor="gray.400" />
                                                         <Text fontWeight='bold'>{"Aplicação"}</Text>
-                                                        <Text>{"Título: " + agenda.vacina!.titulo}</Text>
-                                                        <Text>{"Doses Totais: " + agenda.vacina!.doses}</Text>
-                                                        <Text>{"Intervalo: " + agenda.vacina!.intervalo} {agenda.vacina!.periodicidade}</Text>
-                                                        <Text>{"Descrição: " + agenda.vacina!.descricao}</Text>
+                                                        <Text>{"Título: " + agenda.vacina.titulo}</Text>
+                                                        <Text>{"Doses Totais: " + agenda.vacina.doses}</Text>
+                                                        <Text>{"Intervalo: " + agenda.vacina.intervalo} {agenda.vacina.periodicidade}</Text>
+                                                        <Text>{"Descrição: " + agenda.vacina.descricao}</Text>
                                                     </Box>
 
                                                 </ModalInfo>
@@ -165,7 +160,7 @@ export default function Agendas() {
                                                 </Text>
                                                     
                                                 <Text size="8px" >{agenda.situacao !== "AGENDADO" ? new Intl.DateTimeFormat('pt-BR').format(
-                                                    new Date(agenda.dataSituacao!) ): ""
+                                                    new Date(agenda.dataSituacao) ): ""
                                                 }</Text>
 
 

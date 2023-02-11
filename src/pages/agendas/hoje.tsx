@@ -4,7 +4,7 @@ import { Sidebar } from "@/components/Sidebar";
 import { Box, Button, ButtonGroup, Divider, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Th, Thead, Tr, Text, Alert, AlertDescription, AlertIcon, AlertTitle, CloseButton } from "@chakra-ui/react";
 import { RiAddLine, RiInformationLine } from "react-icons/ri";
 import { AlertDelete } from "@/components/Alerts/AlertDelete";
-import { deleteAgenda, useAgendas, atualizarSituacaoAgenda } from "@/services/hooks/useAgendas";
+import { deleteAgenda, useAgendas, atualizarSituacaoAgenda, useAgendasHoje } from "@/services/hooks/useAgendas";
 import { ModalInfo } from "@/components/ModalInfo";
 import { AlertCancelar } from "@/components/Alerts/AlertCancelar";
 import { AlertRealizar } from "@/components/Alerts/AlertRealizar";
@@ -18,7 +18,7 @@ export default function Agendas() {
 
     const [errorMessage, setErrorMessage] = useState<ErrorMessage>({ message: "" });
 
-    const { data, isLoading, isFetching, error, refetch } = useAgendas()
+    const { data, isLoading, isFetching, error, refetch } = useAgendasHoje()
 
     const handleDeleteAgenda = async (id: number) => {
         await deleteAgenda(id).catch(error => setErrorMessage({ message: error.response.data.detail }));

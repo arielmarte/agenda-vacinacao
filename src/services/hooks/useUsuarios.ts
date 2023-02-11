@@ -39,11 +39,11 @@ console.log(data)
       nome: usuario.nome,
       dataNascimento: usuario.dataNascimento,
       sexo: usuario.sexo,
-      logradouro: usuario.logradouro,
-      numero: usuario.numero,
-      setor: usuario.setor,
-      cidade: usuario.cidade,
-      uf: usuario.uf,
+      logradouro: usuario.logradouro? usuario.logradouro : '',
+      numero: usuario.numero? usuario.numero : '',
+      setor: usuario.setor? usuario.setor : '',
+      cidade: usuario.cidade? usuario.cidade : '',
+      uf: usuario.uf? usuario.uf : '',
       alergias: usuario.alergias
     };
   });
@@ -62,9 +62,13 @@ export function useUsuarios() {
 export async function useCreateUsuario(usuario: Usuario): Promise<CreateUsuarioResponse> {
   console.log(usuario)
   usuario.alergias = []
+  usuario.idsAlergias?(
   usuario.idsAlergias!.forEach(a => {
     usuario.alergias!.push({"id": a})
-  });
+  })) : (usuario.alergias = [])
+
+console.log(usuario)
+
   const { data } = await api.post('/usuarios', usuario);
 
   return {

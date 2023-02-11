@@ -2,7 +2,7 @@ import { forwardRef, ForwardRefRenderFunction } from "react";
 import { FieldError } from 'react-hook-form'
 import { FormControl, FormErrorMessage, FormLabel, Select as ChakraSelect, SelectProps as ChakraSelectProps } from "@chakra-ui/react";
 import { useUfs } from "@/services/hooks/useUF";
-import { useAlergias } from "@/services/hooks/useAlergias";
+import { useVacinas } from "@/services/hooks/useVacinas";
 
 interface SelectProps extends ChakraSelectProps {
   name: string;
@@ -12,7 +12,7 @@ interface SelectProps extends ChakraSelectProps {
 
 const SelectBase: ForwardRefRenderFunction<HTMLSelectElement, SelectProps> 
   = ({ name, label, error = null, ...rest }, ref) => {
-    const { data, isLoading, isFetching, refetch } = useAlergias()
+    const { data, isLoading, isFetching, refetch } = useVacinas()
 
     if (!data) return null;
 
@@ -35,8 +35,8 @@ const SelectBase: ForwardRefRenderFunction<HTMLSelectElement, SelectProps>
           {...rest}
         >
           <option value="" defaultChecked></option>
-            {data.alergias && data.alergias.map(alergia => (
-                                        <option key={alergia.id} value={alergia.id}>{alergia.nome}</option>
+            {data.vacinas && data.vacinas.map(vacina => (
+                                        <option key={vacina.id} value={vacina.id}>{vacina.titulo}</option>
                                     ))}
         </ChakraSelect>
 
@@ -49,4 +49,4 @@ const SelectBase: ForwardRefRenderFunction<HTMLSelectElement, SelectProps>
     );
   }
 
-  export const MultiSelectAlergia = forwardRef(SelectBase);
+  export const MultiSelectVacina = forwardRef(SelectBase);
