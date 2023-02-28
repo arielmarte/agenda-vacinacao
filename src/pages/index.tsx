@@ -1,54 +1,136 @@
-import NextLink from "next/link";
-import { Header } from "@/components/Header";
-import { Sidebar } from "@/components/Sidebar";
-import { Box, Button, ButtonGroup, Divider, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Th, Thead, Tr, Text, HStack, VStack } from "@chakra-ui/react";
-import { RiAddLine, RiInformationLine } from "react-icons/ri";
-import { deleteUsuario, useUsuarios } from "@/services/hooks/useUsuarios";
-import { ModalInfo } from "@/components/ModalInfo";
-import { AlertDelete } from "@/components/Alerts/AlertDelete";
+import { Flex, Button, Stack, SimpleGrid, Heading, Alert, AlertIcon, Box, AlertDescription, AlertTitle, CloseButton } from '@chakra-ui/react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup'
+
+import { Input } from '../components/Form/Input'
+import { Logo } from '@/components/Header/Logo';
+import { useLogin } from "@/services/hooks/useUsuarios";
+import { useAuth } from '@/contexts/AuthContext';
+import { useEffect, useState } from 'react';
+import Router from 'next/router';
+
+type SignInFormData = {
+  usuario: string;
+  senha: string;
+};
+
+type ErrorMessage = {
+  message: string;
+};
+
+const signInFormSchema = yup.object().shape({
+  usuario: yup.string().required('Usuário obrigatório'),
+  senha: yup.string().required('Senha obrigatória'),
+})
+
+export default function SignIn() {
+  const { register, handleSubmit, formState } = useForm<SignInFormData>({
+    resolver: yupResolver(signInFormSchema)
+  })
+
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>({ message: "" });
+
+  const { setAuth } = useAuth();
 
 
-export default function Usuarios() {
+  const handleSignIn: SubmitHandler<SignInFormData> = async (values) => {
+    try {
+      const data = await useLogin(values);
+      setAuth(data.auth);
+      switch(data.auth.funcionalidade.split("|")[0]) {
+        case "home":
+          Router.push('/dispositivos');
+          break;
+        case "sensor":
+          Router.push({
+            pathname: '/dispositivos/sensor',
+            query: {localizacao: data.auth.funcionalidade.split("|")[1], nomeDispositivo: data.auth.funcionalidade.split("|")[2], tipoDispositivo: data.auth.funcionalidade.split("|")[3]},
+          });
+          break;
+        case "atuador":
+          Router.push({
+            pathname: '/dispositivos/led',
+            query: {localizacao: data.auth.funcionalidade.split("|")[1], nomeDispositivo: data.auth.funcionalidade.split("|")[2], tipoDispositivo: data.auth.funcionalidade.split("|")[3], estado: false},
+          });
+          break;
 
-    const { data, isLoading, isFetching, error, refetch } = useUsuarios()
+      }
+      
+    } catch (error: any) {
+      console.log('error');
+      setErrorMessage({ message: error.response?.data.detail });
+    }
+  };
 
-    const handleDeleteUsuario = async (id: number) => {
-        await deleteUsuario(id);
-        refetch();
-    };
+  return (
+    <Flex
+      w="100vw"
+      h="100vh"
+      align="center"
+      justify="center"
+      
+    >
+      <SimpleGrid flex="1" gap="4" minChildWidth="320px" >
+        <Stack spacing="4" align="center" h="100%" justifyContent="center">
+          <Logo/>
+        </Stack>
+        <Flex
+          as="form"
+          width="100%"
+          maxWidth={360}
+          bg="gray.100"
+          p="8"
+          borderRadius={8}
+          flexDir="column"
+          onSubmit={handleSubmit(handleSignIn)}
+        >
+          
+          <Stack spacing="4">
+            <Heading size='lg' pb="1rem">Login</Heading>
+            {errorMessage.message !== "" && (
+                        <Alert status='error'  >
+                            <AlertIcon />
+                            <Box>
+                                <AlertTitle>Ocorreu um erro</AlertTitle>
+                                <AlertDescription>
+                                    {errorMessage.message}
+                                </AlertDescription>
+                            </Box>
+                            <CloseButton
+                                alignSelf='flex-end'
+                                position='absolute'
+                                right={1}
+                                top={1}
+                                onClick={() => setErrorMessage({ message: "" })}
+                            />
+                        </Alert>
+                    )}
+            <Input 
+              type="text" 
+              label="Usuario" 
+              error={formState.errors.usuario}
+              {...register('usuario')}
+            />
+            <Input 
+              type="password" 
+              label="Senha" 
+              error={formState.errors.senha}
+              {...register('senha')}
+            />
+          </Stack>
 
-
-    return (
-        <Box>
-            <Header />
-
-            <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
-                <Sidebar />
-
-                <Box flex="1" borderRadius={8} bg="gray.100" p="8">
-
-                    <Flex mb="8" justify="center" align="center">
-                        <Heading size="lg" fontWeight="normal">Projeto Web - Agenda de Vacinação</Heading>
-
-                    </Flex>
-                    <Divider my="6" borderColor="gray.400" />
-                    <Flex justify="center">
-                    <VStack spacing="4">
-                            <Text>
-                                Projeto desenvolvido como trabalho final da disciplina de Software para Persistência de Dados, no semestre 2022/2 do curso de Engenharia de Software da Universidade Federal de Goiás, por:
-                                <br />  • <strong>Ariel Marte Araújo Silva (201900264)</strong>
-                                <br />  • <strong>Marco Feitosa Araújo (201905542)</strong>
-                                <br/>
-                            </Text>
-                            <Heading size="md" fontWeight="normal">Descrição do Projeto</Heading>
-                            <Text>
-                                <br/>Aplicação para agendamento de vacinas, com back-end em Java Spring Boot e front-end em React.
-                                A aplicação permite cadastro, consulta e remoção de usuários, alergias, vacinas e agendamentos. Há opções de listagem completa para todas as tabelas, agendas com opção de listagem por <strong>Canceladas</strong> ou <strong>Realizadas</strong>, listagem de agendas por dia, agendamentos por usuário, e a opção de “dar baixa” em uma agenda (definindo-a como <strong>Canceladas</strong> ou <strong>Realizadas</strong>).
-                            </Text>
-                    </VStack>
-                    </Flex>
-                </Box>
-            </Flex>
-        </Box>
-    )
+          <Button
+            type="submit"
+            mt="6"
+            colorScheme="green"
+            size="lg"
+            isLoading={formState.isSubmitting}
+          >
+            Entrar
+          </Button>
+        </Flex>
+      </SimpleGrid>
+    </Flex>
+  )
 }

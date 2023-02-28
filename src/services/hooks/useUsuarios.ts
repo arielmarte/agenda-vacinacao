@@ -1,81 +1,43 @@
-import Alergias from "@/pages/alergias";
 import { useQuery } from "react-query";
 import { api } from "../api";
 
-type Alergia = {
-  id?: number;
-  nome?: string;
-}
-
 type Usuario = {
-  id?: number;
-  nome: string;
-  dataNascimento: string;
-  sexo: string;
-  logradouro: string;
-  numeroLogradouro: number;
-  setor: string;
-  cidade: string;
-  uf: string;
-  idsAlergias?: number[];
-  alergias?: Alergia[];
+  usuario: string;
+  senha: string;
 }
 
-type GetUsuarioResponse = {
-  usuarios: Usuario[];
+type UsuarioLoginResponse = {
+  auth: AuthResponse;
+  
 }
 
-type CreateUsuarioResponse = {
-  usuario: Usuario;
+type AuthResponse = {
+  token: string;
+  funcionalidade: string;
 }
 
-export async function getUsuarios(): Promise<GetUsuarioResponse> {
-  const { data } = await api.get('usuarios')
-console.log(data)
-
-  const usuarios = data.map((usuario: Usuario) => {
-    return {
-      id: usuario.id,
-      nome: usuario.nome,
-      dataNascimento: usuario.dataNascimento,
-      sexo: usuario.sexo,
-      logradouro: usuario.logradouro? usuario.logradouro : '',
-      numeroLogradouro: usuario.numeroLogradouro? usuario.numeroLogradouro : '',
-      setor: usuario.setor? usuario.setor : '',
-      cidade: usuario.cidade? usuario.cidade : '',
-      uf: usuario.uf? usuario.uf : '',
-      alergias: usuario.alergias
-    };
-  });
-  console.log(usuarios);
-  return {
-    usuarios
-  }
-}
-
-
-export function useUsuarios() {
-  return useQuery('usuarios', getUsuarios, {
-  })
-}
-
-export async function useCreateUsuario(usuario: Usuario): Promise<CreateUsuarioResponse> {
+export async function useLogin(usuario: Usuario): Promise<UsuarioLoginResponse> {
   console.log(usuario)
-  usuario.alergias = []
-  usuario.idsAlergias?(
-  usuario.idsAlergias!.forEach(a => {
-    usuario.alergias!.push({"id": a})
-  })) : (usuario.alergias = [])
+  const { data } = await api.post('/login', usuario);
 
-console.log(usuario)
-
-  const { data } = await api.post('/usuarios', usuario);
-
-  return {
-    usuario: data
-  };
+  return { auth: data} ;
 }
 
-export async function deleteUsuario(id: number) {
-  await api.delete(`usuarios/${id}`);
+
+export async function getSessao(auth: AuthResponse | null): Promise<UsuarioLoginResponse> {
+  console.log(auth);
+  const url = '/login/sessao'
+
+  const { data } = await api.get(encodeURI(url), { 
+
+    headers: {
+        token: auth!.token,
+      },
+  });
+  console.log(data);
+  return {auth: data};
+}
+
+export function useSessao(auth: AuthResponse | null) {
+  return useQuery("sessao", () => getSessao(auth) );
 }
